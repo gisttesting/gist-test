@@ -12,7 +12,7 @@ import static io.restassured.RestAssured.given;
 
 public class BaseService {
 
-    private static ResourceBundle rb = ResourceBundle.getBundle("config");
+    protected ResourceBundle rb = ResourceBundle.getBundle("config");
 
     public RequestSpecification setup() {
         final String GIST_BASE_URI = rb.getString("url");

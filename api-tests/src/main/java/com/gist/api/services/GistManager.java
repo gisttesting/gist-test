@@ -7,6 +7,7 @@ import com.gist.api.models.GistFile;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -38,16 +39,21 @@ public class GistManager extends BaseService {
                 .when().delete(String.format(SPECIFIC_GIST_ACTION_ENDPOINT, gistId)));
     }
 
-    @Step("get gist that already exists")
+    @Step("get gist that already exists and contains at least one file")
     public String getExistingGistId() throws NoGistsFoundError {
-        int attempts = 3;
+        int attempts = Integer.valueOf(rb.getString("max_attempts_to_find_gist"));
         while (attempts > 0) {
             List<String> existingGistIds = setup().when().get().path("id");
             if (!existingGistIds.isEmpty()) {
-                return existingGistIds.get(new Random().nextInt(existingGistIds.size()));
+                String gistId = existingGistIds.get(new Random().nextInt(existingGistIds.size()));
+                HashMap<String, GistFile> files = getGistById(gistId).path("files");
+                if (!files.isEmpty()) {
+                    return gistId;
+                }
             }
         }
-        throw new NoGistsFoundError("There are no existing gists for the user. Please create a gist first");
+        throw new NoGistsFoundError("There are no existing gists for the user. Or there are no files for gists. " +
+                "Please create a gist first or add a file to existing one");
     }
 
     @Step("get name of the file from gist that already exists")
