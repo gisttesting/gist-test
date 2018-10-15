@@ -1,0 +1,5 @@
+<aspectj>
+    <aspects>
+        <aspect name="com.gist.api.aspects.LoggableAspect"/>
+    </aspects>
+</aspectj>
