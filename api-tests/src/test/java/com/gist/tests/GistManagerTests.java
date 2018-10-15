@@ -110,7 +110,7 @@ public class GistManagerTests {
     private String getFileNameToUpdate(String gistId) {
         String gistFileNameToUpdate = gistManager.getExistingGistFilename(gistId);
         if (gistFileNameToUpdate.isEmpty()) {
-            gistFileNameToUpdate = faker.color().name().concat(".txt");
+            gistFileNameToUpdate = "new_file.txt";
         }
         return gistFileNameToUpdate;
     }
